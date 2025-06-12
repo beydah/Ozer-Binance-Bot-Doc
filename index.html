@@ -228,7 +228,7 @@
                 EĞER YENI_TUG_TIPI == "YEŞİL":
                     EĞER MEVCUT_POZISYON_TIPI != "LONG":
                         // Pozisyon yoksa veya Short ise, Long aç
-                        BINANCE_CLIENT.PiyasaEmriGonder(AYARAR.general.current_coin_pair, "BUY", AYARLAR.general.position_size_usdt, AYARLAR.general.leverage_ratio)
+                        BINANCE_CLIENT.PiyasaEmriGonder(AYARLAR.general.current_coin_pair, "BUY", AYARLAR.general.position_size_usdt, AYARLAR.general.leverage_ratio)
                         MEVCUT_POZISYON_TIPI = "LONG"
                         TELEGRAM_BOT_YONETICISI.MesajGonder(AYARLAR.general.telegram_chat_id, $"Long pozisyon açıldı: {AYARLAR.general.current_coin_pair}")
                     
@@ -492,35 +492,166 @@ FONKSIYON GetPositionInfo(symbol):
                                         <h4 class="font-bold text-lg mb-2 text-[#81B29A]">settings.json</h4>
                                         <p class="text-sm text-gray-600 mb-2">Botun genel, API ve strateji ayarlarını saklar. Bot yeniden başlatıldığında kaldığı yerden devam etmesini sağlar.</p>
                                         <pre class="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto"><code>{
-  "general": {
-    "is_bot_active": true,
-    "current_coin_pair": "APTUSDT",
-    "position_size_usdt": 1000.0,
-    "leverage_ratio": 2,
-    "margin_mode": "ISOLATED",
-    "renko_atr_period": 14,
-    "stop_loss_coefficient": 1.5,
-    "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID",
-    "data_fetch_interval_seconds": 15,
-    "webhook_secret_key": "YOUR_TRADINGVIEW_WEBHOOK_SECRET_KEY",
-    "price_precision": 5,
-    "quantity_precision": 2,
-    "error_retry_interval_seconds": 60
-  },
-  "api_credentials": {
-    "binance_api_key": "YOUR_BINANCE_API_KEY",
-    "binance_secret_key": "YOUR_BINANCE_SECRET_KEY",
-    "telegram_bot_token": "YOUR_TELEGRAM_BOT_TOKEN"
-  },
-  "strategy_parameters": {
-    "last_processed_brick_close_price": 0.0,
-    "last_processed_brick_type": "NONE",
-    "current_atr_value": 0.0,
-    "current_position_type": "NONE",
-    "long_stop_loss": 0.0,
-    "short_stop_loss": 0.0,
-    "next_long_position_value": 0.0,
-    "next_short_position_value": 0.0
+  "setting": {
+    "bot": {
+      "telegram_bot_token": "GIZLIDIR",
+      "telegram_dev_id": "7770286467",
+      "telegram_user_id": "",
+      "binance_key": "GIZLIDIR",
+      "binance_secret": "GIZLIDIR",
+      "tradingview_key": "GIZLIDIR",
+      "host_ip": "localhost",
+      "host_port": "5001",
+      "long_message": "{'symbol': {{ticker}}, 'trend': LONG, 'price': {{ticker.price}}, 'key': bot21_OZERCAKIR}",
+      "short_message": "{'symbol': {{ticker}}, 'trend': SHORT, 'price': {{ticker.price}}, 'key': bot21_OZERCAKIR}",
+      "dev_web": "beydahsaglam.com",
+      "dev_mail": "info.beydahsaglam@gmail.com",
+      "dev_telegram_username": "@beydahsaglam"
+    },
+    "trade": {
+      "default_atr": 14.0,
+      "default_slc": 0.2,
+      "default_atrr": 2.0,
+      "default_limit": 15.0,
+      "default_leverage": 1,
+      "default_order_type": "future"
+    },
+    "order_types": {
+     "future": "future",
+     "market": "market"
+    }
+  }
+}</code></pre>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2 text-[#E07A5F]">telegram.json</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Telegram botu ile ilgili mesaj, buton ve komut tanımlamalarını saklar.</p>
+                                        <pre class="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto"><code>{
+  "telegram": {
+    "message": {
+      "start": "Ben Ozer Binance Bot. Yapabilecegin islemleri gormek icin /menu /n",
+      "info": "",
+      "help": "Gelistiriciye ulasmak icin/nbeydahsaglam.com /n/menu /n",
+      "menu": "Bot Menu/nBenimle asagidaki islemleri yapabilirsin./n",
+      "exit": "Cikis Yapmak Icin /exit /n",
+      "exited": "Cikis Yapildi /menu /n",
+      "error": "Bir hata yaptim /menu /n",
+      "alert": "Bir hata yaptiniz /menu /n",
+      "success": "Islem basarili /menu /n",
+      "denied": "Erisiminiz Yok/n",
+      "unknown": "Ne dediginizi anlamadim /menu /n",
+      "bot_start": "Trade Baslat/n",
+      "bot_stop": "Trade Durdur/n",
+      "settings": "Ayarlar/n",
+      "logs": "Log Kayitlari/n"
+    },
+    "button": {
+      "start_buttons": "BURAYA START BUTONU GELECEK YANI MENU",
+      "menu_buttons": "BURAYA TUM ISLEMLERIN BUTONLARI GELECEK",
+      "help_buttons": "BURAYA DEVELOPER WEBSITESI, MAILI, TELEGRAM KULLANICI ADI GELECEK",
+      "get_order_buttons": "BURADA ISLEMI OLAN SEMBOLLER BUTON OLARAK GELECEK",
+      "get_wallet_buttons": "BURADA WALLET'TAKI SEMBOLLERI GOR VE WALLET DEGISIMI GOR BUTONLARI GELECEK",
+      "get_symbol_settings_buttons": "BURADA SYMBOL.JSON DOSYASINDAKI SEMBOLLER GELECEK VE BUNA BAGLI AYARLAR",
+      "change_trade_settings_buttons": "BURADA SETTING.JSON DOSYASINDAKI TRADE AYARLARI BUTON OLARAK GELECEK",
+      "change_symbol_settings_buttons": "BURADA SYMBOL.JSON DOSYASINDAKI SETTING AYARLARI BUTON OLARAK GELECEK",
+      "webhook_buttons": "BURADA SETTING.JSON DOSYASINDAKI BOT AYARLARINA AIT WEB HOOK VE JSON MESAJLARI BUTON OLARAK GELECEK",
+      "log_buttons": "BURADA HATA LOG GETIR, UYARI LOG GETIR, ISLEM LOG GETIR BUTONLARI OLACAK"
+    },
+    "command": {
+      "start": "/start",
+      "info": "/info",
+      "help": "/help",
+      "menu": "/menu",
+      "exit": "/exit",
+      "bot_start": "/bot_start",
+      "bot_stop": "/bot_stop",
+      "get_order": "/get_order",
+      "get_wallet": "/get_wallet",
+      "get_symbol_settings": "/get_symbol_settings",
+      "change_symbol_settings": "/change_symbol_settings",
+      "change_trade_settings": "/change_trade_settings",
+      "get_log_error": "/get_log_error",
+      "get_log_alert": "/get_log_alert",
+      "get_log_transactions": "/get_log_transactions"
+    }
+  }
+}</code></pre>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2 text-[#81B29A]">symbol.json</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Botun takip ettiği sembollerin trend, ayar ve cüzdan bilgilerini saklar.</p>
+                                        <pre class="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto"><code>{
+  "symbol": {
+    "trend": {
+      "SYMBOL": {
+        "last_trend": "LONG",
+        "new_trend": "LONG",
+        "last_trend_datetime": "DATETIME",
+        "new_trend_datetime": "DATETIME"
+      }
+    },
+    "setting": {
+      "SYMBOL": {
+        "atr": 14.0,
+        "slc": 0.2,
+        "atrr": 2.0,
+        "limit": 15.0,
+        "leverage": 1,
+        "order_type": "FUTURE"
+      }
+    },
+    "wallet": {
+      "balance": {
+        "first_balance": 1000.0,
+        "last_balance": 1500.0,
+        "now_balance": 1000.0,
+        "first_balance_date": "DATETIME",
+        "last_balance_date": "DATETIME",
+        "new_balance_date": "DATETIME"
+      }
+    }
+  }
+}</code></pre>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2 text-[#E07A5F]">log.json</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Genel log mesajlarını (hata, uyarı, işlem) saklar.</p>
+                                        <pre class="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto"><code>{
+  "log": {
+    "DATETIME": {
+      "error": {
+        "title": "ERROR ORNEK",
+        "text": "ORNEK HATA MESAJI"
+      },
+      "alert": {
+        "title": "ALERT ORNEK",
+        "text": "ORNEK UYARI MESAJI"
+      },
+      "transaction": {
+        "title": "TRANSACTION ORNEK",
+        "text": "ORNEK ISLEM MESAJI"
+      }
+    }
+  }
+}</code></pre>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2 text-[#81B29A]">order.json</h4>
+                                        <p class="text-sm text-gray-600 mb-2">Örnek işlem siparişi detaylarını saklar.</p>
+                                        <pre class="bg-gray-800 text-white p-3 rounded-md text-xs overflow-x-auto"><code>{
+  "order": {
+    "SYMBOL": {
+      "DATETIME": {
+        "event_type": "FUTURE_LONG",
+        "entry_price": "1400.00",
+        "renko_price": "1200.00",
+        "coin_quantity": "20.00",
+        "usdt_quantity": "15.00",
+        "calc_atr": "14.00",
+        "calc_stop_loss": "1300.00",
+        "calc_reverse_position": "1200.00"
+      }
+    }
   }
 }</code></pre>
                                     </div>
@@ -635,6 +766,24 @@ FONKSIYON GetPositionInfo(symbol):
     "available_balance": 1000.0,
     "change_amount": 0.0,
     "notes": "Bot başlatıldı, başlangıç bakiyesi"
+  },
+  {
+    "timestamp": "2025-06-12T14:30:05Z",
+    "event_type": "POSITION_OPENED",
+    "asset": "USDT",
+    "total_balance": 1000.0,
+    "available_balance": 999.0,
+    "change_amount": -1.0,
+    "notes": "Long pozisyon açılışı, marjin kullanımı"
+  },
+  {
+    "timestamp": "2025-06-12T14:45:10Z",
+    "event_type": "POSITION_CLOSED",
+    "asset": "USDT",
+    "total_balance": 990.0,
+    "available_balance": 990.0,
+    "change_amount": -10.0,
+    "notes": "Long pozisyon SL ile kapandı, PnL: -10 USDT"
   }
 ]</code></pre>
                                     </div>
@@ -675,7 +824,7 @@ FONKSIYON GetPositionInfo(symbol):
                                     <li><code class="bg-gray-200 p-1 rounded">get_kline_data(symbol, interval, limit=500)</code>: Renko ve ATR hesaplaması için mum verilerini çeker.</li>
                                     <li><code class="bg-gray-200 p-1 rounded">get_account_balance(asset=None)</code>: Cüzdan bakiyesini sorgular.</li>
                                     <li><code class="bg-gray-200 p-1 rounded">get_open_orders(symbol=None)</code>: Mevcut açık emirleri listeler.</li>
-                                    <li><code class="bg-gray-200 p-1 rounded">get_position_info(symbol=None)</code>: Mevcut açık pozisyonları kontrol eder.</li>
+                                    <li><code class="bg-gray-200 p-1 rounded">get_position_info(symbol=None)</code>: Mevcut pozisyon bilgilerini alır.</li>
                                     <li><code class="bg-gray-200 p-1 rounded">place_market_order(symbol, side, quantity_usdt, options=None)</code>: Pozisyon açmak için piyasa emri gönderir.</li>
                                     <li><code class="bg-gray-200 p-1 rounded">place_stop_market_order(symbol, side, stop_price, quantity_usdt, options=None)</code>: SL, NLPV, NSPV emirlerini oluşturur.</li>
                                     <li><code class="bg-gray-200 p-1 rounded">cancel_all_open_orders(symbol)</code>: Emirleri güncellemeden önce mevcut emirleri iptal eder.</li>
@@ -734,6 +883,29 @@ FONKSIYON GetPositionInfo(symbol):
                         <canvas id="tasksChart"></canvas>
                     </div>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white/50 p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h4 class="font-bold text-lg mb-3">Yapılan Çalışmalar</h4>
+                            <ul class="list-decimal list-inside text-gray-700 space-y-1 text-sm">
+                                <li>Döküman Yazıldı</li>
+                                <li>Veri Mimarisi Oluşturuldu</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/50 p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h4 class="font-bold text-lg mb-3">Yapılacak Çalışmalar</h4>
+                            <ul class="list-decimal list-inside text-gray-700 space-y-1 text-sm">
+                                <li>Kod Mimarisi</li>
+                                <li>Binance Hata Düzeltme</li>
+                                <li>TradingView Hata Düzeltme</li>
+                                <li>Telegram Hata Düzeltme</li>
+                                <li>Arayüz Oluşturma</li>
+                                <li>Pine Script Yazma</li>
+                                <li>Kullanım Dökümanı Oluşturma</li>
+                                <li>Sunucu Kiralama</li>
+                                <li>Sunucu Kurulum</li>
+                                <li>Kod Kurulum</li>
+                                <li>Kullanım Eğitimi</li>
+                            </ul>
+                        </div>
                         <div class="bg-white/50 p-6 rounded-xl shadow-sm border border-gray-200">
                             <h4 class="font-bold text-lg mb-3">1. Altyapı ve Entegrasyonlar (Yüksek Öncelik)</h4>
                             <ul class="list-decimal list-inside text-gray-700 space-y-1 text-sm">
@@ -956,17 +1128,19 @@ FONKSIYON GetPositionInfo(symbol):
             function renderTasksChart() {
                 const ctx = document.getElementById('tasksChart').getContext('2d');
                 const taskData = {
-                    labels: ['Altyapı & Entegrasyon', 'Çekirdek Mantık', 'Arayüz & Etkileşim', 'Veri & Güvenlik', 'Test & Optimizasyon', 'Dokümantasyon'],
+                    labels: ['Yapılan Çalışmalar', 'Yapılacak Çalışmalar', 'Altyapı & Entegrasyon', 'Çekirdek Mantık', 'Arayüz & Etkileşim', 'Veri & Güvenlik', 'Test & Optimizasyon', 'Dokümantasyon'],
                     datasets: [{
                         label: 'Görev Sayısı',
-                        data: [5, 5, 4, 4, 4, 2],
+                        data: [2, 11, 5, 5, 4, 4, 4, 2], // Updated data values
                         backgroundColor: [
-                            'rgba(129, 178, 154, 0.6)',
-                            'rgba(242, 204, 143, 0.6)',
+                            'rgba(129, 178, 154, 0.6)', // Yapılan Çalışmalar
+                            'rgba(242, 204, 143, 0.6)', // Yapılacak Çalışmalar
                             'rgba(92, 133, 214, 0.6)',
                             'rgba(224, 122, 95, 0.6)',
                             'rgba(148, 148, 168, 0.6)',
-                            'rgba(180, 190, 200, 0.6)'
+                            'rgba(180, 190, 200, 0.6)',
+                            'rgba(75, 192, 192, 0.6)', // New color for consistency
+                            'rgba(153, 102, 255, 0.6)' // New color for consistency
                         ],
                         borderColor: [
                             '#81B29A',
@@ -974,7 +1148,9 @@ FONKSIYON GetPositionInfo(symbol):
                             '#5C85D6',
                             '#E07A5F',
                             '#9494A8',
-                            '#B4BEC8'
+                            '#B4BEC8',
+                            '#4BC0C0',
+                            '#9966FF'
                         ],
                         borderWidth: 2,
                         borderRadius: 5,
